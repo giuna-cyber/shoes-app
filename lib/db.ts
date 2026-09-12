@@ -1,6 +1,14 @@
-import { sql } from "@vercel/postgres";
+import { neon } from "@neondatabase/serverless";
 
-export { sql };
+const databaseUrl = process.env.DATABASE_URL;
+
+if (!databaseUrl) {
+  throw new Error(
+    "DATABASE_URL non configurata. Collega il database Neon al progetto Vercel."
+  );
+}
+
+export const sql = neon(databaseUrl);
 
 export async function testDatabaseConnection() {
   try {
@@ -10,7 +18,7 @@ export async function testDatabaseConnection() {
 
     return {
       ok: true,
-      currentTime: result.rows[0]?.current_time ?? null,
+      currentTime: result[0]?.current_time ?? null,
     };
   } catch (error) {
     console.error("Errore connessione database:", error);
