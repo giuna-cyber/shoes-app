@@ -47,11 +47,9 @@ export async function GET() {
         error:
           error instanceof Error
             ? error.message
-            : "Errore sconosciuto durante la creazione della tabella",
+            : "Errore sconosciuto durante l'inizializzazione del database",
       },
-      {
-        status: 500,
-      }
+      { status: 500 }
     );
   }
 }
