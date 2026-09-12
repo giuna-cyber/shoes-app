@@ -1,0 +1,8 @@
+{
+  "devDependencies": {
+    "@types/node": "^22.20.2"
+  },
+  "dependencies": {
+    "@vercel/postgres": "^0.10.0"
+  }
+}

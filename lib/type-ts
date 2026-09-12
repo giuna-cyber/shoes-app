@@ -1,0 +1,412 @@
+export type GenereScarpa =
+  | "uomo"
+  | "donna"
+  | "unisex"
+  | "bambino"
+  | "bambina";
+
+export type StatoOrdine =
+  | "nuovo"
+  | "confermato"
+  | "in_preparazione"
+  | "spedito"
+  | "consegnato"
+  | "annullato";
+
+export type StatoSpedizione =
+  | "da_preparare"
+  | "preparato"
+  | "affidato_corriere"
+  | "in_transito"
+  | "consegnato";
+
+export type TipoPromozione =
+  | "percentuale"
+  | "prezzo_fisso";
+
+export type RuoloAdmin =
+  | "admin"
+  | "operatore";
+
+export interface CategoriaScarpa {
+  id: number;
+  nome: string;
+  slug: string;
+  descrizione?: string | null;
+  attiva: boolean;
+  ordinamento?: number;
+  created_at?: string;
+  updated_at?: string;
+}
+
+export interface MarcaScarpa {
+  id: number;
+  nome: string;
+  slug: string;
+  logo_url?: string | null;
+  attiva: boolean;
+  ordinamento?: number;
+  created_at?: string;
+  updated_at?: string;
+}
+
+export interface ColoreScarpa {
+  id: number;
+  nome: string;
+  codice_hex?: string | null;
+  attivo: boolean;
+}
+
+export interface TagliaScarpa {
+  id: number;
+  valore: string;
+  ordinamento?: number;
+  attiva: boolean;
+}
+
+export interface ImmagineScarpa {
+  id: number;
+  articolo_id: number;
+  url: string;
+  alt?: string | null;
+  principale: boolean;
+  ordinamento?: number;
+  created_at?: string;
+}
+
+export interface VarianteScarpa {
+  id: number;
+  articolo_id: number;
+
+  sku: string;
+
+  taglia: string;
+  colore: string;
+
+  colore_id?: number | null;
+  taglia_id?: number | null;
+
+  quantita_disponibile: number;
+
+  prezzo?: number | null;
+  prezzo_promozionale?: number | null;
+
+  attiva: boolean;
+
+  created_at?: string;
+  updated_at?: string;
+}
+
+export interface Scarpa {
+  id: number;
+
+  marca_id?: number | null;
+  categoria_id?: number | null;
+
+  marca: string;
+  modello: string;
+  slug: string;
+
+  categoria: string;
+  genere: GenereScarpa;
+
+  descrizione?: string | null;
+  descrizione_breve?: string | null;
+
+  prezzo: number;
+  prezzo_promozionale?: number | null;
+
+  codice?: string | null;
+  sku_base?: string | null;
+
+  attiva: boolean;
+  in_evidenza?: boolean;
+
+  immagine_principale?: string | null;
+
+  immagini?: ImmagineScarpa[];
+  varianti?: VarianteScarpa[];
+
+  promozione?: Promozione | null;
+
+  created_at?: string;
+  updated_at?: string;
+}
+
+export interface Promozione {
+  id: number;
+
+  titolo: string;
+  descrizione?: string | null;
+
+  tipo: TipoPromozione;
+
+  valore: number;
+
+  data_inizio?: string | null;
+  data_fine?: string | null;
+
+  attiva: boolean;
+
+  immagine_url?: string | null;
+
+  articolo_id?: number | null;
+  categoria_id?: number | null;
+  marca_id?: number | null;
+
+  created_at?: string;
+  updated_at?: string;
+}
+
+export interface IndirizzoCliente {
+  id?: number;
+
+  nome?: string | null;
+  cognome?: string | null;
+
+  indirizzo: string;
+  civico?: string | null;
+
+  cap: string;
+  citta: string;
+  provincia?: string | null;
+  nazione: string;
+
+  telefono?: string | null;
+
+  predefinito?: boolean;
+}
+
+export interface Cliente {
+  id: number;
+
+  nome: string;
+  cognome: string;
+
+  email: string;
+  telefono?: string | null;
+
+  data_nascita?: string | null;
+
+  indirizzo?: string | null;
+  civico?: string | null;
+  cap?: string | null;
+  citta?: string | null;
+  provincia?: string | null;
+  nazione?: string | null;
+
+  attivo: boolean;
+
+  indirizzi?: IndirizzoCliente[];
+
+  created_at?: string;
+  updated_at?: string;
+}
+
+export interface ClienteSessione {
+  id: number;
+  nome: string;
+  cognome: string;
+  email: string;
+}
+
+export interface RigaCarrello {
+  variante_id: number;
+  articolo_id: number;
+
+  marca: string;
+  modello: string;
+
+  taglia: string;
+  colore: string;
+
+  sku: string;
+
+  quantita: number;
+
+  prezzo_unitario: number;
+  prezzo_totale: number;
+
+  immagine?: string | null;
+}
+
+export interface Carrello {
+  righe: RigaCarrello[];
+
+  totale_articoli: number;
+  totale: number;
+}
+
+export interface RigaOrdine {
+  id: number;
+  ordine_id: number;
+
+  articolo_id?: number | null;
+  variante_id?: number | null;
+
+  marca: string;
+  modello: string;
+
+  taglia?: string | null;
+  colore?: string | null;
+
+  sku?: string | null;
+
+  quantita: number;
+
+  prezzo_unitario: number;
+  totale_riga: number;
+
+  immagine?: string | null;
+}
+
+export interface Spedizione {
+  id: number;
+  ordine_id: number;
+
+  stato: StatoSpedizione;
+
+  corriere?: string | null;
+  tracking?: string | null;
+
+  data_spedizione?: string | null;
+  data_consegna?: string | null;
+
+  note?: string | null;
+
+  created_at?: string;
+  updated_at?: string;
+}
+
+export interface Ordine {
+  id: number;
+
+  numero_ordine: string;
+
+  cliente_id: number;
+
+  stato: StatoOrdine;
+
+  totale_articoli: number;
+  costo_spedizione: number;
+  sconto: number;
+  totale: number;
+
+  metodo_pagamento?: string | null;
+  stato_pagamento?: string | null;
+
+  nome_spedizione: string;
+  cognome_spedizione: string;
+
+  indirizzo_spedizione: string;
+  civico_spedizione?: string | null;
+
+  cap_spedizione: string;
+  citta_spedizione: string;
+  provincia_spedizione?: string | null;
+  nazione_spedizione: string;
+
+  telefono_spedizione?: string | null;
+
+  note_cliente?: string | null;
+  note_admin?: string | null;
+
+  righe?: RigaOrdine[];
+
+  spedizione?: Spedizione | null;
+
+  created_at?: string;
+  updated_at?: string;
+}
+
+export interface AdminUser {
+  id: number;
+
+  nome: string;
+  cognome?: string | null;
+
+  email: string;
+
+  ruolo: RuoloAdmin;
+
+  attivo: boolean;
+
+  created_at?: string;
+  updated_at?: string;
+}
+
+export interface AdminSessione {
+  id: number;
+  nome: string;
+  email: string;
+  ruolo: RuoloAdmin;
+}
+
+export interface ImpostazioniNegozio {
+  id: number;
+
+  nome_negozio: string;
+
+  logo_url?: string | null;
+  favicon_url?: string | null;
+
+  colore_primario: string;
+  colore_secondario: string;
+  colore_sfondo?: string | null;
+  colore_testo?: string | null;
+
+  email?: string | null;
+  telefono?: string | null;
+
+  indirizzo?: string | null;
+  citta?: string | null;
+  cap?: string | null;
+  provincia?: string | null;
+
+  sito_web?: string | null;
+
+  instagram?: string | null;
+  facebook?: string | null;
+
+  costo_spedizione?: number;
+  spedizione_gratuita_da?: number | null;
+
+  valuta?: string;
+
+  created_at?: string;
+  updated_at?: string;
+}
+
+export interface StatisticheDashboard {
+  totale_ordini: number;
+  totale_clienti: number;
+  totale_articoli: number;
+
+  totale_vendite: number;
+
+  ordini_nuovi: number;
+  ordini_spediti: number;
+
+  prodotti_sotto_scorta?: number;
+}
+
+export interface ApiResponse<T> {
+  ok: boolean;
+
+  data?: T;
+
+  message?: string;
+
+  error?: string;
+}
+
+export interface PaginatedResponse<T> {
+  ok: boolean;
+
+  data: T[];
+
+  page: number;
+  per_page: number;
+  total: number;
+  total_pages: number;
+}
