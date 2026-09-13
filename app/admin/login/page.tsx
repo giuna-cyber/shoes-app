@@ -1,35 +1,26 @@
 "use client";
 
+import Link from "next/link";
 import { FormEvent, useState } from "react";
 import { useRouter } from "next/navigation";
 
 export default function AdminLoginPage() {
   const router = useRouter();
-
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
   const [loading, setLoading] = useState(false);
   const [errore, setErrore] = useState("");
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-
     setErrore("");
     setLoading(true);
 
     try {
       const response = await fetch("/api/admin/login", {
         method: "POST",
-
-        headers: {
-          "Content-Type": "application/json",
-        },
-
-        body: JSON.stringify({
-          email,
-          password,
-        }),
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
       });
 
       const data = await response.json();
@@ -41,12 +32,8 @@ export default function AdminLoginPage() {
 
       router.replace("/admin");
       router.refresh();
-    } catch (error) {
-      console.error("Errore login:", error);
-
-      setErrore(
-        "Impossibile comunicare con il server. Riprova tra qualche istante."
-      );
+    } catch {
+      setErrore("Impossibile comunicare con il server");
     } finally {
       setLoading(false);
     }
@@ -60,56 +47,35 @@ export default function AdminLoginPage() {
             <div className="mb-3 text-sm font-semibold uppercase tracking-[0.2em] text-zinc-400">
               XCodeLab
             </div>
-
             <h1 className="text-3xl font-bold tracking-tight text-zinc-950">
               Shoes Admin
             </h1>
-
-            <p className="mt-2 text-sm text-zinc-500">
-              Accedi al pannello di gestione del negozio
-            </p>
           </div>
 
-          <form
-            onSubmit={handleSubmit}
-            className="space-y-5"
-          >
+          <form onSubmit={handleSubmit} className="space-y-5">
             <div>
-              <label
-                htmlFor="email"
-                className="mb-2 block text-sm font-medium text-zinc-700"
-              >
+              <label className="mb-2 block text-sm font-medium text-zinc-700">
                 Email
               </label>
-
               <input
-                id="email"
                 type="email"
-                autoComplete="email"
                 required
                 value={email}
-                onChange={(event) => setEmail(event.target.value)}
-                placeholder="admin@..."
-                className="w-full rounded-xl border border-zinc-300 bg-white px-4 py-3 text-zinc-950 outline-none transition focus:border-zinc-950 focus:ring-2 focus:ring-zinc-950/10"
+                onChange={(e) => setEmail(e.target.value)}
+                className="w-full rounded-xl border border-zinc-300 px-4 py-3"
               />
             </div>
 
             <div>
-              <label
-                htmlFor="password"
-                className="mb-2 block text-sm font-medium text-zinc-700"
-              >
+              <label className="mb-2 block text-sm font-medium text-zinc-700">
                 Password
               </label>
-
               <input
-                id="password"
                 type="password"
-                autoComplete="current-password"
                 required
                 value={password}
-                onChange={(event) => setPassword(event.target.value)}
-                className="w-full rounded-xl border border-zinc-300 bg-white px-4 py-3 text-zinc-950 outline-none transition focus:border-zinc-950 focus:ring-2 focus:ring-zinc-950/10"
+                onChange={(e) => setPassword(e.target.value)}
+                className="w-full rounded-xl border border-zinc-300 px-4 py-3"
               />
             </div>
 
@@ -122,14 +88,19 @@ export default function AdminLoginPage() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full rounded-xl bg-zinc-950 px-5 py-3 font-semibold text-white transition hover:bg-zinc-800 disabled:cursor-not-allowed disabled:opacity-60"
+              className="w-full rounded-xl bg-zinc-950 px-5 py-3 font-semibold text-white"
             >
               {loading ? "Accesso..." : "Accedi"}
             </button>
           </form>
 
-          <div className="mt-8 border-t border-zinc-100 pt-5 text-center text-xs text-zinc-400">
-            Shoes App · XCodeLab
+          <div className="mt-5 text-center">
+            <Link
+              href="/admin/forgot-password"
+              className="text-sm font-medium text-zinc-600 underline"
+            >
+              Password dimenticata?
+            </Link>
           </div>
         </div>
       </div>

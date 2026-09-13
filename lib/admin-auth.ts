@@ -24,7 +24,6 @@ function getJwtSecret() {
 export async function getAdminSession(): Promise<AdminSession | null> {
   try {
     const cookieStore = await cookies();
-
     const token = cookieStore.get(ADMIN_COOKIE_NAME)?.value;
 
     if (!token) {
@@ -45,18 +44,14 @@ export async function getAdminSession(): Promise<AdminSession | null> {
     return {
       id: payload.id,
       nome: payload.nome,
-
       cognome:
         typeof payload.cognome === "string"
           ? payload.cognome
           : null,
-
       email: payload.email,
       ruolo: payload.ruolo,
     };
-  } catch (error) {
-    console.error("Errore verifica sessione admin:", error);
-
+  } catch {
     return null;
   }
 }

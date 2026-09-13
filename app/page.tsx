@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 export default function HomePage() {
   return (
     <main className="min-h-screen bg-white text-black">
@@ -15,42 +17,19 @@ export default function HomePage() {
         </p>
 
         <div className="mt-10 flex flex-col gap-3 sm:flex-row">
-          <a
+          <Link
             href="/catalogo"
             className="rounded-2xl bg-black px-6 py-3 font-semibold text-white transition hover:opacity-85"
           >
             Vai al catalogo
-          </a>
+          </Link>
 
-          <a
+          <Link
             href="/admin"
             className="rounded-2xl border border-black/15 px-6 py-3 font-semibold transition hover:bg-black/5"
           >
             Area Admin
-          </a>
-        </div>
-
-        <div className="mt-16 grid w-full max-w-4xl gap-4 sm:grid-cols-3">
-          <div className="rounded-3xl border border-black/10 p-6">
-            <h2 className="text-lg font-semibold">Catalogo</h2>
-            <p className="mt-2 text-sm leading-6 text-black/60">
-              Marche, modelli, taglie, colori e disponibilità per variante.
-            </p>
-          </div>
-
-          <div className="rounded-3xl border border-black/10 p-6">
-            <h2 className="text-lg font-semibold">Ordini</h2>
-            <p className="mt-2 text-sm leading-6 text-black/60">
-              Acquisti, spedizioni, stato ordine e storico cliente.
-            </p>
-          </div>
-
-          <div className="rounded-3xl border border-black/10 p-6">
-            <h2 className="text-lg font-semibold">White-label</h2>
-            <p className="mt-2 text-sm leading-6 text-black/60">
-              Logo, colori e impostazioni personalizzabili per ogni negozio.
-            </p>
-          </div>
+          </Link>
         </div>
       </section>
     </main>

@@ -2,11 +2,10 @@ import { NextRequest, NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
 import { SignJWT } from "jose";
 import { sql } from "@/lib/db";
+import { ADMIN_COOKIE_NAME } from "@/lib/admin-auth";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
-
-const COOKIE_NAME = "shoes_admin_session";
 
 function getJwtSecret() {
   const secret = process.env.ADMIN_JWT_SECRET;
@@ -34,13 +33,8 @@ export async function POST(request: NextRequest) {
 
     if (!email || !password) {
       return NextResponse.json(
-        {
-          ok: false,
-          error: "Email e password sono obbligatorie",
-        },
-        {
-          status: 400,
-        }
+        { ok: false, error: "Email e password sono obbligatorie" },
+        { status: 400 }
       );
     }
 
@@ -60,13 +54,8 @@ export async function POST(request: NextRequest) {
 
     if (rows.length === 0) {
       return NextResponse.json(
-        {
-          ok: false,
-          error: "Credenziali non valide",
-        },
-        {
-          status: 401,
-        }
+        { ok: false, error: "Credenziali non valide" },
+        { status: 401 }
       );
     }
 
@@ -74,13 +63,8 @@ export async function POST(request: NextRequest) {
 
     if (!admin.attivo) {
       return NextResponse.json(
-        {
-          ok: false,
-          error: "Utente amministratore disabilitato",
-        },
-        {
-          status: 403,
-        }
+        { ok: false, error: "Utente amministratore disabilitato" },
+        { status: 403 }
       );
     }
 
@@ -91,29 +75,19 @@ export async function POST(request: NextRequest) {
 
     if (!passwordValida) {
       return NextResponse.json(
-        {
-          ok: false,
-          error: "Credenziali non valide",
-        },
-        {
-          status: 401,
-        }
+        { ok: false, error: "Credenziali non valide" },
+        { status: 401 }
       );
     }
 
     const token = await new SignJWT({
       id: Number(admin.id),
       nome: String(admin.nome),
-      cognome:
-        admin.cognome !== null
-          ? String(admin.cognome)
-          : null,
+      cognome: admin.cognome !== null ? String(admin.cognome) : null,
       email: String(admin.email),
       ruolo: String(admin.ruolo),
     })
-      .setProtectedHeader({
-        alg: "HS256",
-      })
+      .setProtectedHeader({ alg: "HS256" })
       .setIssuedAt()
       .setExpirationTime("8h")
       .sign(getJwtSecret());
@@ -123,17 +97,14 @@ export async function POST(request: NextRequest) {
       admin: {
         id: Number(admin.id),
         nome: String(admin.nome),
-        cognome:
-          admin.cognome !== null
-            ? String(admin.cognome)
-            : null,
+        cognome: admin.cognome !== null ? String(admin.cognome) : null,
         email: String(admin.email),
         ruolo: String(admin.ruolo),
       },
     });
 
     response.cookies.set({
-      name: COOKIE_NAME,
+      name: ADMIN_COOKIE_NAME,
       value: token,
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
@@ -154,9 +125,7 @@ export async function POST(request: NextRequest) {
             ? error.message
             : "Errore durante il login",
       },
-      {
-        status: 500,
-      }
+      { status: 500 }
     );
   }
 }
