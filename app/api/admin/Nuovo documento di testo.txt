@@ -1,0 +1,12 @@
+$body = @{
+  nome = "Pina"
+  cognome = "cutaia"
+  email = "info@xcodelab.it"
+  password = "adminadmin"
+} | ConvertTo-Json
+
+Invoke-RestMethod `
+  -Uri "https://shoes.xcodelab.it/api/admin/setup" `
+  -Method POST `
+  -ContentType "application/json" `
+  -Body $body
