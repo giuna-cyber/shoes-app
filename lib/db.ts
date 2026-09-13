@@ -4,7 +4,7 @@ const databaseUrl = process.env.DATABASE_URL;
 
 if (!databaseUrl) {
   throw new Error(
-    "DATABASE_URL non configurata. Collega il database Neon al progetto Vercel."
+    "DATABASE_URL non configurata. Collega il database Neon al progetto."
   );
 }
 
